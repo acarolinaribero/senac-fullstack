@@ -5,13 +5,13 @@ using MeuCorre.Domain.Interfaces.Repositories;
 
 namespace MeuCorre.Application.UseCases.Categorias.Queries
 {
-    public class ListarTodasCategoriasQuery : IRequest<IList<CategoriaDto>>
+    public class ListarTodasTagQuery : IRequest<IList<CategoriaDto>>
     {
         [Required(ErrorMessage = "Informe o Id da categoria")]
         public required Guid UsuarioId { get; set; }
     }
 
-    internal class ListarTodasCategoriasQueryHandler : IRequestHandler<ListarTodasCategoriasQuery, IList<CategoriaDto>>
+    internal class ListarTodasCategoriasQueryHandler : IRequestHandler<ListarTodasTagQuery, IList<CategoriaDto>>
     {
         private readonly ICategoriaRepository _categoriaRepository;
         public ListarTodasCategoriasQueryHandler(ICategoriaRepository categoriaRepository)
@@ -19,7 +19,7 @@ namespace MeuCorre.Application.UseCases.Categorias.Queries
             _categoriaRepository = categoriaRepository;
         }
 
-        public async Task<IList<CategoriaDto>> Handle(ListarTodasCategoriasQuery request, CancellationToken cancellationToken)
+        public async Task<IList<CategoriaDto>> Handle(ListarTodasTagQuery request, CancellationToken cancellationToken)
         {
             var listaCategorias = await _categoriaRepository.ListarTodasPorUsuarioAsync(request.UsuarioId);
 
