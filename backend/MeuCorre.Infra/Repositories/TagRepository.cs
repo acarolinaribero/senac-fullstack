@@ -1,6 +1,8 @@
 ﻿using MeuCorre.Domain.Entities;
 using MeuCorre.Domain.Enums;
 using MeuCorre.Domain.Interfaces.Repositories;
+using MeuCorre.Infra.Data.Context;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,39 +13,59 @@ namespace MeuCorre.Infra.Repositories
 {
     public class TagRepository : ITagRepository 
     {
-        public Task AdicionarAsync(Tag tag)
+        private readonly MeuDbContext _meuDbcontext;
+        public TagRepository(MeuDbContext meuDbContext)
         {
-            throw new NotImplementedException();
+            _meuDbcontext = meuDbContext;
         }
 
-        public Task AtualizarAsync(Tag tag)13
+        public async Task AdicionarAsync(Tag tag)
         {
-            throw new NotImplementedException();
+            _meuDbcontext.Tags.Add(tag);
+            await _meuDbcontext.SaveChangesAsync();
+        }
+
+        public async Task AtualizarAsync(Tag tag)
+        {
+            _meuDbcontext.Tags.Update(tag);
+            await _meuDbcontext.SaveChangesAsync();
         }
 
         public Task<bool> ExisteAsync(Guid tagId)
         {
-            throw new NotImplementedException();
+           var existe = _meuDbcontext.Tags.AnyAsync(t => t.Id == tagId);
+            return existe;
         }
 
-        public Task<IList<Tag>> ListarTodasPorUsuarioAsync(Guid usuarioId)
+        public async Task<IList<Tag>> ListarTodasPorUsuarioAsync(Guid usuarioId)
         {
-            throw new NotImplementedException();
+            var listaDeTags = _meuDbcontext.Tags
+                 .Where(c => c.UsuarioId == usuarioId);
+
+            return await listaDeTags.ToListAsync();
         }
 
-        public Task<bool> NomeExisteParaUsuarioAsync(string nome, TipoTransacao tipo, Guid usuarioId)
+        public Task<bool> NomeExisteParaUsuarioAsync(string nome, Guid usuarioId)
         {
-            throw new NotImplementedException();
+           var existe = _meuDbcontext.Tags
+                .AnyAsync(
+                            t => t.Nome == nome &&
+                            t.UsuarioId == usuarioId
+                        );
+            return existe;
         }
 
         public Task<Tag?> ObterPorIdAsync(Guid tagId)
         {
-            throw new NotImplementedException();
+            var tag = _meuDbcontext.Tags.FirstOrDefaultAsync(t => t.Id == tagId);
+            return tag;
         }
 
-        public Task RemoverAsync(Tag tag)
+        public async Task RemoverAsync(Tag tag)
         {
-            throw new NotImplementedException();
+            _meuDbcontext.Tags.Remove(tag);
+            await _meuDbcontext.SaveChangesAsync();
+
         }
     }
 }
