@@ -12,8 +12,7 @@ namespace MeuCorre.Application.UseCases.Tags.Commands
 {
     public class AtivarTagCommand : IRequest<(string, bool)>
     {
-        [Required(ErrorMessage = "É necessário informar o ID do usuario")]
-        public required Guid UsuarioId { get; set; }
+      
 
         [Required(ErrorMessage = "É necessário informar o ID ")]
         public required Guid Id { get; set; }

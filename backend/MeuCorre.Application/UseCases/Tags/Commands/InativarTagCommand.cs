@@ -10,10 +10,10 @@ using System.Threading.Tasks;
 
 namespace MeuCorre.Application.UseCases.Tags.Commands
 {
-    public class InativarTagHandler : IRequest<(string, bool)>
+    public class InativarTagCommand : IRequest<(string, bool)>
     {
         [Required(ErrorMessage = "É necessário informar o ID da T")]
-        public required Guid CategoriaId { get; set; }
+        public required Guid Id { get; set; }
     }
     internal class InativarTagCommandHandler : IRequestHandler<InativarCategoriaCommand, (string, bool)>
     {
